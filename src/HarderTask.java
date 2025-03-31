@@ -1,30 +1,36 @@
-import java.util.*;
 import java.io.*;
-public class Main {
+import java.util.*;
+public class HarderTask {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] ab = br.readLine().split(" ");
         int a = Integer.parseInt(ab[0]);
         int b = Integer.parseInt(ab[1]);
-        int[][] carSpeeds = new int[a+b][];
+        long[][] carDistance = new long[a+b][];
+        int nOfCars = 0;
         for (int i = 0; i < a+b; i++) {
             String[] s = br.readLine().split(" ");
-            int[] speeds = new int[s[0]];
-            for (int j = 1; j < s[0]; j++) {
-               speeds[j] = Integer.parseInt(s[j]);
+            int noOfCars = Integer.parseInt(s[0]);
+            nOfCars += noOfCars;
+            long[] speeds = new long[noOfCars];
+            for (int j = 1; j < noOfCars; j++) {
+               speeds[j] = Long.parseLong(s[j]);
             }
             carDistance[i] = speeds;
         }
-
-
+        long[] badIntervals = badIntervals(carDistance, nOfCars);
+        Arrays.sort(badIntervals);
+        System.out.println((int) badIntervals[0]);
     }
-    private int[][] badIntervals(int[][] carDistance){
+    private static long[] badIntervals(long[][] carDistance, int nOfCars){
+        long[] badIntervals = new long[nOfCars];
         for (int i = 0; i < carDistance.length; i++) {
-            for (int j = 0; j < carDistance[i].length; j++) {
-                int[i+j][0] =  carDistance[i][j]/5.56e-3;
-                int[i+j][1] = carDistance[i][j]+5e9/5.56e-3
+            if(carDistance[i] != null){
+                for (int j = 0; j < carDistance[i].length; j++) {
+                    badIntervals[i+j] = (long) (carDistance[i][j]/5.56e-3-((i+1)*1.43e12));
+                }
             }
         }
-        return carDistance;
+        return badIntervals;
     }
 }
